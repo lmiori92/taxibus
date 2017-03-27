@@ -29,3 +29,6 @@ A major issue of building such a chaining is execution time and timing of bit / 
 
 A write() call is simply something that once returning "OK" it is assumed the data has been successfully sent. Nothing more than that. No status calls. The state is carried along this write call, the final state is a chain of intermediate states e.g. if an error has occured on port toggling (an advanced ECU / board could have a short protection that has triggered) the error is transported through all the intermediate steps until the device driver (originating write() call)
 The write is defined as following:
+```c
+t_interface_err retval = write(t_interface *interface, uint8_t *data, uint8_t len);
+```
