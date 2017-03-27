@@ -1,5 +1,5 @@
 # taxibus
-A bare metal C interface exchange layer to transfer bytes in a transparent way on any defined medium
+A bare metal C interface exchange layer to transfer bytes in a transparent way on any defined medium. It is designed to be use in restricted-resources environments like a microcontroller.
 
 # Preamble
 
