@@ -39,3 +39,50 @@ The read is defined as following:
 ```c
 t_interface_err retval = read(t_interface *interface, uint8_t *data, uint8_t len);
 ```
+# A complete concept C snippet
+```c
+t_interface i2c_bitbanged;
+// . write = <implementation of i2c bitbang>
+// . chain = shift_register interface;
+t_interface shift_register;
+// . write = <implementation of shift register>
+// . chain = avr_port interface;
+t_interface avr_port;
+// . write = <implementation of user avr port definition>
+// . chain = NULL (or debug over serial...);
+
+// to initialize the interfaces with standard implementations
+// xxx_init( <interface>, <binded to (chained to)> )
+i2c_bitbanged_init(&i2c_bitbanged, &shift_register);
+shift_register_init(&shift_register, &avr_port);
+avr_port_init(&avr_port);
+
+// what a driver would eventually perform...
+display_attach(&i2c_bitbanged);
+
+// draw something
+display_write_string(...);
+display_xxx(...);
+
+// call the update function
+display_periodic();
+// --> that will simply:
+    e_interface_err err = INTERFACE_UNKNOWN;
+    t_interface_state state;
+    uint8_t buffer[2] = { 0x01, 0x02 };
+
+    // this do-while block is standardized
+    // with a inline function:
+    // err = interface_write(&attached, &state, buffer, sizeof(buffer));
+    // so every driver will implement a blocking write in the same way
+    do
+    {
+        err = attached.write(&state, buffer, sizeof(buffer));
+        // --> this call performs some computation
+        //     and calls .chain.write() with computed data
+        //     --> in turn, .chain.write() will call
+        //          --> .chain.chain.write() and so on and so forth...
+        //  <-- the result will get back
+    } while (err != INTERFACE_BUSY);
+//  <-- Sent !
+```
