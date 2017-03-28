@@ -7,7 +7,6 @@ This library wants to be a simple-yet-powerful portable layer written in standar
 A very typical example: the HD44780 display. It communicates -data- (bytes), eventually commands and characters, over a parallel port. Lately, i2c port extenders and shift registers have been used to reduce the number of pin and this poses the problem of a generic driver.
 By designing a crystal clear write() function it is possible to send commands and character to the target display without knowing a bit of the intermediate layers.
 The initial implementation is focused on write-only operations which are mainly targetting display drivers.
-A read() call is foreseen and is exactly the reverse of a write(), no major issues are found.
 
 # Requirements
 
@@ -31,4 +30,12 @@ A write() call is simply something that once returning "OK" it is assumed the da
 The write is defined as following:
 ```c
 t_interface_err retval = write(t_interface *interface, uint8_t *data, uint8_t len);
+```
+
+# Read Interface
+
+A read() call is simply something that once returning "OK" it is assumed that the data has been successfully received. Nothing more than that. No status calls. The state is carried along with this read call, and the final state is a chain of intermediate states e.g. if an error has occured on port reading, then the error is transported through all the intermediate steps until the device driver (originating read() call).
+The read is defined as following:
+```c
+t_interface_err retval = read(t_interface *interface, uint8_t *data, uint8_t len);
 ```
