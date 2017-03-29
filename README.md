@@ -18,6 +18,7 @@ With this library we want to perform a better integration of both worlds: a taxi
 - a write() call is designed so that it is the only interface. By calling write with the desired data, it shall be possible to know how many bytes have been transferred via the unknown media "tunnel" and the state of the transfer.
 - initialization is performed by the write() call, no other major interface is foreseen. 
 - shall support arbitrary chaining of interfaces
+- Shall be usable from C++ code; perhaps a class overlay could be potentially added in the future
 
 # Chaining
 
