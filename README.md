@@ -43,6 +43,32 @@ The read is defined as following:
 ```c
 t_interface_err retval = read(t_interface *interface, uint8_t *data, uint8_t len);
 ```
+# A working example
+```c
+#include "deasplay/taxibus/interface.h"
+#include "deasplay/taxibus/i2c_linux.h"
+#include "deasplay/taxibus/debugger.h"
+
+t_interface display_entry_interface;
+t_interface i2c_logger;
+
+void init(void)
+{
+    /* initialize debugger interface, do not chain to anything else */
+    debugger_init(&i2c_logger, NULL, NULL);
+    /* initialize linux i2c interface and chain to the logger as well */
+    i2c_linux_init(&display_entry_interface, &i2c_logger, 0x3CU);
+
+    /* set the entry interface */
+    DISPLAY_SET_INTERFACE(&display_entry_interface);
+    /* initialize display (on the previously selected interface) */
+    display_init();
+
+    /* let's see what the display driver has sent on the bus */
+    i2c_logger_dump();
+}
+
+```
 # A complete concept C snippet
 ```c
 t_interface i2c_bitbanged;
