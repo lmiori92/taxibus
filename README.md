@@ -8,6 +8,10 @@ A very typical example: the HD44780 display. It communicates -data- (bytes), eve
 By designing a crystal clear write() function it is possible to send commands and character to the target display without knowing a bit of the intermediate layers.
 The initial implementation is focused on write-only operations which are mainly targetting display drivers.
 
+# Library Name
+A "taxi" is a transportation mean that carries people from one place to another and it is usually quite pricey, much higher than a public transportation mean, say a "bus".
+With this library we want to perform a better integration of both worlds: a taxi is easy to get and on-demand, a bus might get tricky to catch. We want to integrate device drivers in a jiffy paying a somewhat higher cost, still trying to follow the bus lines...
+
 # Requirements
 
 - the user shall only define the behavior of the final destination. This can be defining and toggling pins on a specific architecture, opening a file for debugging the transmitted data and so on.
