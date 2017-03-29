@@ -1,5 +1,5 @@
 # taxibus
-A bare metal C interface exchange layer to transfer bytes in a transparent way on any defined medium. It is designed to be use in restricted-resources environments like a microcontroller.
+A bare metal C interface exchange layer to transfer bytes in a transparent way on any defined medium. It is designed to be used in restricted-resources environments like a microcontroller.
 
 # Preamble
 
@@ -18,7 +18,8 @@ With this library we want to perform a better integration of both worlds: a taxi
 - a write() call is designed so that it is the only interface. By calling write with the desired data, it shall be possible to know how many bytes have been transferred via the unknown media "tunnel" and the state of the transfer.
 - initialization is performed by the write() call, no other major interface is foreseen. 
 - shall support arbitrary chaining of interfaces
-- Shall be usable from C++ code; perhaps a class overlay could be potentially added in the future
+- shall be usable from C++ code; perhaps a class overlay could be potentially added in the future
+- shall be flexible also in the user layer. The application can defined its own medium(s) and any device driver shall be compatible with those.
 
 # Chaining
 
