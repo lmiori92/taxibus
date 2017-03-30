@@ -16,8 +16,8 @@
 
 */
 
-#ifndef TAXIBUS_DEBUGGER_H_
-#define TAXIBUS_DEBUGGER_H_
+#ifndef TAXIBUS_SHIFT_REGISTER_H_
+#define TAXIBUS_SHIFT_REGISTER_H_
 
 #include "interface.h"
 
@@ -27,15 +27,16 @@ extern "C"
 {
 #endif
 
-INTERFACE_INIT_FUNCTION(debugger_init, void* voidparam);
+#ifndef MAX_SHIFT_REGISTER_DEVICES
+#define MAX_SHIFT_REGISTER_DEVICES    1
+#endif
 
-INTERFACE_WRITE_FUNCTION(debugger_write);
+INTERFACE_INIT_FUNCTION(shift_register_init, uint8_t clock, uint8_t latch, uint8_t data);
 
-void debugger_dump();
-void debugger_byte_bits();
+INTERFACE_WRITE_FUNCTION(shift_register_write);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* DEASPLAY_TAXIBUS_DEBUGGER_H_ */
+#endif /* TAXIBUS_SHIFT_REGISTER_H_ */

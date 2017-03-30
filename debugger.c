@@ -18,6 +18,7 @@
 
 #include "interface.h"
 #include "debugger.h"
+#include "pin.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -44,7 +45,7 @@ INTERFACE_WRITE_FUNCTION(debugger_write)
     return INTERFACE_OK;
 }
 
-void i2c_logger_dump()
+void debugger_dump()
 {
     uint8_t line = 0;
     for (uint16_t i = 0; i < buf_id; i++)
@@ -58,4 +59,26 @@ void i2c_logger_dump()
         }
 
     }
+    printf("\n");
 }
+
+void debugger_byte_bits()
+{
+    for (uint16_t i = 0; i < buf_id; i++)
+    {
+        printf("0x%02x\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n",
+                i2cbuffer[i],
+                i2cbuffer[i],
+                GET_BIT(i2cbuffer[i], 0),
+                GET_BIT(i2cbuffer[i], 1),
+                GET_BIT(i2cbuffer[i], 2),
+                GET_BIT(i2cbuffer[i], 3),
+                GET_BIT(i2cbuffer[i], 4),
+                GET_BIT(i2cbuffer[i], 5),
+                GET_BIT(i2cbuffer[i], 6),
+                GET_BIT(i2cbuffer[i], 7)
+                );
+    }
+    printf("\n");
+}
+

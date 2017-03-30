@@ -33,7 +33,8 @@ typedef enum _e_interface_err
     INTERFACE_UNKNOWN,
     INTERFACE_TIMEOUT,
     INTERFACE_ERROR,
-    INTERFACE_BUSY
+    INTERFACE_BUSY,
+    INTERFACE_OVERFLOW
 } e_interface_err;
 
 typedef struct _t_inferface_state
@@ -44,7 +45,7 @@ typedef struct _t_inferface_state
     void    *interface_internal;
 } t_interface_state;
 
-#define INTERFACE_INIT_FUNCTION(x, interface_params)     e_interface_err x(t_interface *state, t_interface *chained, interface_params)
+#define INTERFACE_INIT_FUNCTION(x, ...)     e_interface_err x(t_interface *state, t_interface *chained, __VA_ARGS__)
 
 #define INTERFACE_WRITE_FUNCTION(x)     e_interface_err x(t_interface *state)
 
