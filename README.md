@@ -73,6 +73,30 @@ void init(void)
 ```
 # A debug session on the shift register interface
 ![alt tag](shift_register_test.png)
+```c
+/* the code that generates the output bits on stdout as in the picture */
+t_interface logger;
+t_interface shift_register;
+
+/* initialize debugger interface, do not chain to anything else */
+debugger_init(&logger, NULL, NULL);
+
+/* initialize a shift register device */
+shift_register_init(&shift_register, &logger, PIN_0, PIN_1, PIN_2);
+
+/* just test the shift register and debug it by chaining the debugger */
+uint8_t datum = 0xAAU;
+
+/* prepare */
+INTERFACE_DATA(shift_register.state, &datum, 1U);
+
+/* send */
+shift_register.write(&shift_register);
+
+/* debug */
+debugger_byte_bits();
+
+```
 # A complete concept C snippet
 ```c
 t_interface i2c_bitbanged;
