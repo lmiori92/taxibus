@@ -71,6 +71,8 @@ void init(void)
 }
 
 ```
+# A debug session on the shift register interface
+![alt tag](shift_register_test.png)
 # A complete concept C snippet
 ```c
 t_interface i2c_bitbanged;
