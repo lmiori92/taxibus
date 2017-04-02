@@ -97,6 +97,10 @@ shift_register.write(&shift_register);
 debugger_byte_bits();
 
 ```
+# Currently tested and working
+- i2c over linux i2c devices
+- shift register
+- HD44780 user app driver -> linux VGA I2C -> PCF8574 I/O extender -> Shift Register -> HD44780 display.
 # A complete concept C snippet
 ```c
 t_interface i2c_bitbanged;
