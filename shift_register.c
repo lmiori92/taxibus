@@ -33,7 +33,6 @@ INTERFACE_INIT_FUNCTION(shift_register_init, uint8_t clock, uint8_t latch, uint8
         shift_registers_registered[devices].latch = (uint8_t)(1 << latch);
         shift_registers_registered[devices].data = (uint8_t)(1 << data);
         state->state.interface_internal = (void*)&shift_registers_registered[devices];
-        state->state.flags = 0U;    /* support virtual port variable */
         state->chain = chained;
         state->write = shift_register_write;
         devices++;
@@ -52,20 +51,25 @@ INTERFACE_WRITE_FUNCTION(shift_register_write)
 {
     e_interface_err err = INTERFACE_UNKNOWN;
 
-    uint8_t i, byte;
-    uint8_t port = state->state.flags;
+    uint8_t i;
+    uint8_t port = 0;
     uint8_t *data_ptr = state->state.data;
+    uint8_t *data_end = state->state.data + state->state.len;
     uint8_t clock = ((t_shift_register_pins*)state->state.interface_internal)->clock;
     uint8_t data = ((t_shift_register_pins*)state->state.interface_internal)->data;
     uint8_t latch = ((t_shift_register_pins*)state->state.interface_internal)->latch;
-    /* Do not transfer the temporary register to the outputs */
 
     /* set the virtual port as output data */
-    INTERFACE_DATA(state->chain->state, &port, 1U);
+    uint8_t buffer[26]; /* 26 bytes = 26 port toggles for 1 byte */
+    uint8_t id;
+    INTERFACE_DATA(state->chain->state, &buffer, sizeof(buffer));
 
-    for (byte = 0; byte < state->state.len; byte++)
+    //for (byte = 0; byte < state->state.len; byte++)
+    do
     {
+        id = 0;
 
+        /* Clock serial data out */
         for (i = 0; i < 8; i++)
         {
             /* Shift bits out */
@@ -77,24 +81,28 @@ INTERFACE_WRITE_FUNCTION(shift_register_write)
             {
                 PIN_UNSET(port, data);
             }
-
-            INTERFACE_CHAIN_FUNCTION(state->chain);
+            buffer[id++] = port;
 
             /* Clocks the bits */
             PIN_SET(port, clock);
-            INTERFACE_CHAIN_FUNCTION(state->chain);
+            buffer[id++] = port;
             PIN_UNSET(port, clock);
-            INTERFACE_CHAIN_FUNCTION(state->chain);
+            buffer[id++] = port;
         }
+
         /* Transfer the temporary register to the outputs */
         PIN_SET(port, latch);
-        INTERFACE_CHAIN_FUNCTION(state->chain);
+        buffer[id++] = port;
         PIN_UNSET(port, latch);
-        INTERFACE_CHAIN_FUNCTION(state->chain);
+        buffer[id++] = port;
+
+        /* write the buffer, byte - wide */
+        err = INTERFACE_CHAIN_FUNCTION(state->chain);
 
         /* advance data pointer */
         data_ptr++;
-    }
+
+    } while (data_ptr >= data_end);
 
     return err;
 }

@@ -39,7 +39,7 @@ typedef enum _e_interface_err
 
 typedef struct _t_inferface_state
 {
-    uint8_t flags;
+    /*uint8_t flags;*/
     uint8_t *data;
     uint8_t len;
     void    *interface_internal;
@@ -49,7 +49,7 @@ typedef struct _t_inferface_state
 
 #define INTERFACE_WRITE_FUNCTION(x)     e_interface_err x(t_interface *state)
 
-#define INTERFACE_CHAIN_FUNCTION(x)     if (x != NULL)  x->write(x);
+#define INTERFACE_CHAIN_FUNCTION(x)     /*if (x != NULL)*/  x->write(x);
 
 typedef struct _t_inferface
 {

@@ -16,6 +16,9 @@
 
 */
 
+/* not enough memory on AVR to perform debugging */
+#ifndef __AVR
+
 #include "interface.h"
 #include "debugger.h"
 #include "pin.h"
@@ -31,7 +34,7 @@ static uint16_t buf_id = 0;
 INTERFACE_INIT_FUNCTION(debugger_init, void* voidparam)
 {
     state->write = debugger_write;
-    state->chain = NULL;
+    state->chain = chained;
     return INTERFACE_OK;
 }
 
@@ -42,6 +45,14 @@ INTERFACE_WRITE_FUNCTION(debugger_write)
         memcpy(&i2cbuffer[buf_id], state->state.data, state->state.len);
         buf_id += state->state.len;
     }
+
+    /* transfer successful, chain next step */
+    if (state->chain != NULL)
+    {
+        INTERFACE_DATA(state->chain->state, INTERFACEPTR_DATA_OUT(state), INTERFACEPTR_LEN_OUT(state));
+        INTERFACE_CHAIN_FUNCTION(state->chain);
+    }
+
     return INTERFACE_OK;
 }
 
@@ -82,3 +93,4 @@ void debugger_byte_bits()
     printf("\n");
 }
 
+#endif

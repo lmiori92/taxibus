@@ -49,6 +49,7 @@ INTERFACE_WRITE_FUNCTION(i2c_linux_write)
     i2cret = i2c_transfer_successful();
     if (i2cret == 0U)
     {
+
         err = INTERFACE_OK;
 
         /* transfer successful, chain next step */

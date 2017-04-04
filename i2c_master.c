@@ -19,6 +19,10 @@
 
 */
 
+/* Do not attempt to compile on Linux-unaware platforms :-) */
+#ifdef __linux__
+
+
 /* Module */
 #include <stdlib.h>
 #include <stdint.h>
@@ -159,6 +163,15 @@ void i2c_transfer_set_data(uint8_t *data, uint8_t len)
  * pointer, its content and/or its length remains constant.
  *
  */
+
+unsigned long micros = 0;
+float millis = 0.0;
+clock_t start, end;
+
+
+
+
+
 void i2c_transfer_start(void)
 {
     if (i2c_xfer_buffer != NULL)
@@ -171,6 +184,8 @@ void i2c_transfer_start(void)
         i2c_successful_operation = false;
 
         /* write to the linux i2c bus driver */
+
+        start = clock();
         if (write(file, i2c_xfer_buffer, i2c_xfer_size) != 0U)
         {
             i2c_successful_operation = false;
@@ -180,6 +195,15 @@ void i2c_transfer_start(void)
             i2c_successful_operation = true;
             fsync(file);
         }
+
+        //code goes here
+
+        end = clock();
+
+        micros = end - start;
+        millis = micros / 1000;
+
+//        printf("%ld\n", micros);
 
     }
     else
@@ -200,3 +224,5 @@ uint8_t i2c_transfer_successful(void)
 
     return i2c_successful_operation;
 }
+
+#endif
