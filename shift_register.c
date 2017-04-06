@@ -102,7 +102,7 @@ INTERFACE_WRITE_FUNCTION(shift_register_write)
         /* advance data pointer */
         data_ptr++;
 
-    } while (data_ptr >= data_end);
+    } while (data_ptr < data_end);
 
     return err;
 }
