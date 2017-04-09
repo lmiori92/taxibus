@@ -62,7 +62,7 @@ INTERFACE_WRITE_FUNCTION(shift_register_write)
     /* set the virtual port as output data */
     uint8_t buffer[26]; /* 26 bytes = 26 port toggles for 1 byte */
     uint8_t id;
-    INTERFACE_DATA(state->chain->state, &buffer, sizeof(buffer));
+    INTERFACE_DATA(state->chain->state, buffer, sizeof(buffer));
 
     //for (byte = 0; byte < state->state.len; byte++)
     do

@@ -92,7 +92,7 @@ uint8_t i2c_busy(void);
 uint8_t i2c_get_state_info(void);
 
 void    i2c_transfer_start(void);
-void    i2c_transfer_set_data(uint8_t *data, uint8_t len);
+void    i2c_transfer_set_data(uint8_t *data, t_xfer_size len);
 uint8_t i2c_transfer_successful(void);
 
 INTERFACE_INIT_FUNCTION(i2c_avr_init, uint8_t address);

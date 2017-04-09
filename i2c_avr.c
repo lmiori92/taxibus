@@ -40,13 +40,13 @@
 /** Data (message) buffer [bytes] */
 static uint8_t *i2c_xfer_buffer;
 /** Size to be transfered (rx or tx) [bytes] */
-static uint8_t i2c_xfer_size;
+static t_xfer_size i2c_xfer_size;
 /** i2c state (last value read from TWSR) */
 static uint8_t i2c_state = TWI_NO_STATE;
 /** i2c last operation successful */
 static bool i2c_successful_operation;
-
 static uint8_t i2c_slave_address;
+static uint8_t i2c_timer;
 
 /**
  * Initialize the i2c subsystem.
@@ -86,12 +86,11 @@ uint8_t i2c_busy(void)
  */
 static inline void i2c_wait_or_timeout(void)
 {
-    uint8_t i = 0;
     do
     {
-        i++;
+        i2c_timer++;
         _delay_us(10);
-        if (i > I2C_MASTER_TIMEOUT)
+        if (i2c_timer > I2C_MASTER_TIMEOUT)
         {
             /* Set the error ... */
             i2c_state = TWI_TIMEOUT;
@@ -101,6 +100,7 @@ static inline void i2c_wait_or_timeout(void)
                     (0 << TWEA) | (0 << TWSTA) | (0 << TWSTO) | // No Signal requests
                     (0 << TWWC);                                 //
         }
+
     } while (TWCR & (1 << TWIE));
 }
 
@@ -133,7 +133,7 @@ uint8_t i2c_get_state_info(void)
  *                  i2c_transfer_start are done in different execution contexts.
  * @param len       length of the data to be transmitted or to be expected
  */
-void i2c_transfer_set_data(uint8_t *data, uint8_t len)
+void i2c_transfer_set_data(uint8_t *data, t_xfer_size len)
 {
     if (data != NULL)
     {
@@ -209,7 +209,7 @@ uint8_t i2c_transfer_successful(void)
  */
 ISR(TWI_vect)
 {
-    static uint8_t i2c_buf_pos = 0;
+    static t_xfer_size i2c_buf_pos = 0;
     static bool addr_sent = false;
 
     /* mask the register to be compatible also with other prescaler values */
@@ -230,6 +230,9 @@ ISR(TWI_vect)
 
     case TWI_MTX_DATA_ACK:
         /* Data byte has been transmitted and ACK received */
+
+        /* reset timeout */
+        i2c_timer = 0U;
 
         if (i2c_buf_pos < i2c_xfer_size)
         {
@@ -270,6 +273,7 @@ ISR(TWI_vect)
     case TWI_MRX_DATA_ACK:
         /* Data byte has been received and ACK transmitted */
 
+        i2c_timer = 0;
         i2c_xfer_buffer[i2c_buf_pos++] = TWDR;
         /* no break : this is intended and not a bug */
 
