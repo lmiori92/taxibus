@@ -43,7 +43,8 @@ typedef enum _e_interface_err
     INTERFACE_TIMEOUT,
     INTERFACE_ERROR,
     INTERFACE_BUSY,
-    INTERFACE_OVERFLOW
+    INTERFACE_OVERFLOW,
+    INTERFACE_NULLPOINTER
 } e_interface_err;
 
 typedef struct _t_inferface_state

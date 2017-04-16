@@ -18,9 +18,9 @@ typedef struct
     uint8_t data;
 } t_shift_register_pins;
 
-uint8_t devices = 0;
+static uint8_t devices = 0;
 
-t_shift_register_pins shift_registers_registered[MAX_SHIFT_REGISTER_DEVICES];
+static t_shift_register_pins shift_registers_registered[MAX_SHIFT_REGISTER_DEVICES];
 
 INTERFACE_INIT_FUNCTION(shift_register_init, uint8_t clock, uint8_t latch, uint8_t data)
 {

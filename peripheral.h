@@ -16,3 +16,27 @@
 
 */
 
+#ifndef TAXIBUS_PERIPHERAL_H_
+#define TAXIBUS_PERIPHERAL_H_
+
+/**
+ * Divider settings
+ */
+typedef enum _e_divider
+{
+    DIV_BY_2, //!< DIV_BY_2
+    DIV_BY_4, //!< DIV_BY_4
+    DIV_BY_8, //!< DIV_BY_8
+    DIV_BY_16,//!< DIV_BY_16
+    DIV_BY_32,//!< DIV_BY_32
+    DIV_BY_64,//!< DIV_BY_64
+    DIV_BY_128//!< DIV_BY_128
+} e_divider;
+
+typedef enum _e_bit_order
+{
+    BIT_ORDER_MSB,
+    BIT_ORDER_LSB
+} e_bit_order;
+
+#endif /* TAXIBUS_PERIPHERAL_H_ */

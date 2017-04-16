@@ -26,6 +26,8 @@
 #include "stddef.h"
 #include "stdbool.h"
 
+#include "taxibus/interface.h"
+
 /* Do not compile on other platforms ! */
 #ifdef __AVR
 
